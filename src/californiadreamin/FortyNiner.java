@@ -96,24 +96,59 @@ public class FortyNiner {
         System.out.println("Went to saloon; Endurance raised by " + pleasure + "% (Endurance = " + endurance + "%); Spent $" + spendings + " (Money = $" + money + ").");
     }
     
+    public void showStatus(){
+        System.out.println("Endurance = " + endurance + "%");
+        System.out.println("Money = $" + money);
+    }
+    
     public void itIsSundayAgain(){
-        System.out.println("It is Sunday again! You choose to:");
-        System.out.println("1. put your feet up and relax (No endurance loss)");
-        System.out.println("2. go to the saloon and have some fun (5-50% endurance gain for $50-200)");
-        System.out.println("3. repair your trusty sluice (Sluice gets fully repaired for $100)");
-        
+
         int opcija = 9;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            try {
-                opcija = Integer.parseInt(reader.readLine());
-            } catch (Exception ex) {
-                System.out.println("Invalid option!");
-                opcija = 9;
+        while(opcija == 9){
+            System.out.println("It is Sunday again! You choose to:");
+            System.out.println("1. put your feet up and relax (No endurance loss)");
+            System.out.println("2. go to the saloon and have some fun (5-50% endurance gain for $50-200)");
+            System.out.println("3. repair your trusty sluice (Sluice gets fully repaired for $100)");
+            System.out.println("4. write a new entry into your journal (Save game)");
+            System.out.println("0. retire (Exit)");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                try {
+                    opcija = Integer.parseInt(reader.readLine());
+                } catch (Exception ex) {
+                    System.out.println("Invalid option!");
+                    opcija = 9;
+                }
+
+            switch(opcija){
+                case 1:
+                    System.out.println("You laze about as the day goes by...");               
+                    break;
+                case 2:
+                    System.out.println("You decide to visit the Canyon Inn...");
+                    if(money >= 50){
+                        goToSaloon();
+                    } else {
+                        System.out.println("... but your wallet protests.");
+                        opcija = 9;
+                    }
+                    break;
+                case 3:
+                    System.out.println("You decide to repair your trusty sluice...");
+                    if(money>=100){
+                        fixSluice();
+                    } else{
+                        System.out.println("... but your wallet protests.");
+                        opcija = 9;
+                    }
+                    break;
+                case 4:
+                    //TODO
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+                    opcija = 9;
             }
-            
-        switch(opcija){
-            
         }
-        
     }
 }
