@@ -16,6 +16,6 @@ public class Pan extends Tool{
     }
     @Override
     public int useTool(){
-        
+        return rnd.nextInt(61); //$0-60
     }
 }
