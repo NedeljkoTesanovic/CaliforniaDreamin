@@ -13,6 +13,7 @@ import java.util.Random;
 public class Pan extends Tool{
     Pan(){
         super();
+        setType("Pan");
     }
     @Override
     public int useTool(){

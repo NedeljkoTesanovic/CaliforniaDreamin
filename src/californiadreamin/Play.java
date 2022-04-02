@@ -15,9 +15,9 @@ public class Play {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        private GoldRush gr = new GoldRush();
-        gr.loadGame();
-        gr.survive();
+        private GoldRush goldRush = new GoldRush();
+        goldRush.loadGame();
+        goldRush.survive();
     }
     
 }

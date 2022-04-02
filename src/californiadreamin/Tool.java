@@ -12,15 +12,17 @@ import java.util.Random;
  */
 public abstract class Tool {
     protected int durability;
+    protected String type;
     protected Random rnd;
     
     Tool(){
         durability = 100;
+        type = "Unknown tool";
         rnd = new Random();
     }
+    public String getType(){ return type;}
+    public void setType(String s) {type = s;}
+    public int getDurability(){return durability;}
     
-    public int getDurability(){
-        return durability;
-    }
     abstract public int useTool();
 }

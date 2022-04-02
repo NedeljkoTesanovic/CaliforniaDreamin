@@ -13,6 +13,7 @@ public class Cradle extends Tool{
     Cradle(){
         super();
         price = 30;
+        setType("Cradle");
     }
     public int getPrice(){
         return price;

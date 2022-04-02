@@ -12,6 +12,7 @@ public class Sluice extends Tool{
     private int price;
     Sluice(){
         super();
+        setType("Sluice");
         price = 100;
     }
     public int getPrice(){
