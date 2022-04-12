@@ -9,13 +9,14 @@ package californiadreamin;
  * @author nedel
  */
 public class Play {
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        private GoldRush goldRush = new GoldRush();
+        System.out.println("\t-= California Dreamin' =-");
+        System.out.println("A text-based gold rush survival game\n\n");
+        
+        GoldRush goldRush = new GoldRush();
         goldRush.loadGame();
         goldRush.survive();
     }

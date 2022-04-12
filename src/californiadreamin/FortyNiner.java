@@ -31,27 +31,46 @@ public class FortyNiner {
     FortyNiner(){
         endurance = 100;
         money = 100;
+        rnd = new Random();
         tools = new ArrayList<Tool>();
         tools.add(new Pan());
         tools.add(new Sluice());
-        //tools.add(new Cradle());
     }
     
+    public void showStats(){
+        System.out.println("\t49-r status");
+        System.out.println("Endurance: " + endurance + "%");
+        System.out.println("Money: " + money);
+        System.out.println("Sluice durability:" + tools.get(1).getDurability() + "%");
+        System.out.println("Number of cradles:" + (tools.size() - 2));
+    }     
+    
     public void useTools(){
+        if(endurance == 0){
+            System.out.println("You find yourself unable to work and earn nothing this week. You try to relax, but it doesn't help.");
+            System.out.println("You conclude that only a visit to the saloon would recuperate you.");
+
+            return;
+        }
         int profit = 0;
         int tempProfit = 0;
+        ArrayList<Tool> toRemove = new ArrayList<Tool>();
         for(Tool t: tools){
             if(t.getDurability() == 0){
                 System.out.println("This " + t.getType() + " is unusable! (Durability = 0%)");
-            }
-            if (t.getType().equals("Cradle")){
-                tools.remove(t);
-                System.out.println("Cradle discarded.");
-                continue;
-            }
+            } else {
             tempProfit = t.useTool();
-            System.out.println("Used " + t.getType() + " and earned $" + tempProfit + ". " + t.getType() + " durability is " + t.getDurability() + "%");
+            System.out.println("Used " + t.getType() + " and earned $" + tempProfit + ". " + t.getType() + " new durability is " + t.getDurability() + "%");
+            }
+            if(t.getType().equals("Cradle") && t.getDurability() == 0){
+                    toRemove.add(t);
+                }
             profit += tempProfit;
+        }
+        tools.removeAll(toRemove);
+        if(!toRemove.isEmpty()){
+            System.out.println("Discarded " + toRemove.size() + " broken cradles");
+            System.out.println("Cradles left: " + (tools.size() - 2));
         }
         System.out.println("Total profit: " + profit);
         money += profit;
@@ -60,21 +79,25 @@ public class FortyNiner {
     public void buyFood(){
         int m = 30 + rnd.nextInt(21);
         money -= m;
-        System.out.println("Bought food for $" + m + ". Money left: $" + money);
+        System.out.println("Bought food for $" + m);
     }
     
     public void loseEndurance(){
-        endurance -= (10 + rnd.nextInt(16));
+        if(endurance == 0){
+            return;
+        }
+        int n = 10 + rnd.nextInt(16);
+        endurance -= n;
         if(endurance < 0)
             endurance = 0;
-        System.out.println("Current endurance = " + endurance + "%");
+        System.out.println("Endurance loss: " + n + "%");
     }
     
     private void fixSluice(){
         if(tools.get(1) instanceof Sluice sluice){
             sluice.repair();
             money -= sluice.getPrice();
-            System.out.println("Spent $" + sluice.getPrice() + " to repair the sluice; Sluice durability = 100%; Money = $" + money);
+            System.out.println("Spent $" + sluice.getPrice() + " to repair the sluice; Sluice durability = 100%");
             tools.set(1, sluice);
         }
     }
@@ -93,7 +116,7 @@ public class FortyNiner {
         
         endurance += pleasure;
         money -= spendings;
-        System.out.println("Went to saloon; Endurance raised by " + pleasure + "% (Endurance = " + endurance + "%); Spent $" + spendings + " (Money = $" + money + ").");
+        System.out.println("Endurance raised by " + pleasure +"%; Spent $" + spendings);
     }
     
     public void showStatus(){
@@ -101,16 +124,57 @@ public class FortyNiner {
         System.out.println("Money = $" + money);
     }
     
+    public void buyCradles(){
+        System.out.println("You pass by a tool vendor that recognizes you as a 49-r.");
+        System.out.println("He asks you how many cradles you'd like to buy - you answer (integer):");
+        int n = 0;
+        while(true){
+            try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            n = Integer.parseInt(reader.readLine());
+            } catch (Exception ex) {
+                System.out.println("Indian ambush! :(\n Info:");
+                ex.printStackTrace();
+                System.out.println("(Input the number of cradles you'd like to buy (integer): ");
+                continue;
+                }
+        if(n < 0){
+            System.out.println("The shopkeeper isn't interested in buying cradles, only in selling them. (Input positive number):");
+            continue;
+        }
+        if (n == 0){
+            System.out.println("You decide to resist impulse shopping...");
+            return;
+        }
+            System.out.println("You decide to buy " + n + " new cradles...");
+        if (money < new Cradle().getPrice() * n){
+            System.out.println("...but the shopkeeper points out that you'd need more money and he's not willing to haggle.");
+            System.out.println("You try again:");
+            continue;
+        }
+        
+        int expense;
+        expense = 0;
+        for(int i = n; i > 0; i--){
+            Cradle cradle = new Cradle();
+            tools.add(cradle);
+            expense += cradle.getPrice();
+        }
+        money -= expense;
+        System.out.println("Bought " + n + " cradles for $" + expense);
+        System.out.println("Money left: $" + money);
+        return;
+        }
+    }
+    
     public void itIsSundayAgain(){
 
         int opcija = 9;
         while(opcija == 9){
             System.out.println("It is Sunday again! You choose to:");
-            System.out.println("1. put your feet up and relax (No endurance loss)");
+            System.out.println("1. put your feet up and relax (Continue to next week)");
             System.out.println("2. go to the saloon and have some fun (5-50% endurance gain for $50-200)");
             System.out.println("3. repair your trusty sluice (Sluice gets fully repaired for $100)");
-            System.out.println("4. write a new entry into your journal (Save game)");
-            System.out.println("0. retire (Exit)");
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 try {
@@ -127,6 +191,7 @@ public class FortyNiner {
                 case 2:
                     System.out.println("You decide to visit the Canyon Inn...");
                     if(money >= 50){
+                        System.out.println("... and you have a grand time there.");
                         goToSaloon();
                     } else {
                         System.out.println("... but your wallet protests.");
@@ -141,9 +206,6 @@ public class FortyNiner {
                         System.out.println("... but your wallet protests.");
                         opcija = 9;
                     }
-                    break;
-                case 4:
-                    //TODO
                     break;
                 default:
                     System.out.println("Invalid option!");

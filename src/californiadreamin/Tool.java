@@ -23,6 +23,7 @@ public abstract class Tool {
     public String getType(){ return type;}
     public void setType(String s) {type = s;}
     public int getDurability(){return durability;}
+    public void setDurability(int d) {durability = d;}
     
     abstract public int useTool();
 }
